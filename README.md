@@ -7,7 +7,7 @@ This version combines the **Premium UI design** from the earlier JavaScript vers
 
 ## Features
 
-- **TypeScript**: Fully migrated from JavaScript.
+- **TypeScript**
 
 ---
 
