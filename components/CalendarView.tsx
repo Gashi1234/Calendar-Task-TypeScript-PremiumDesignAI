@@ -21,7 +21,17 @@ const colors = {
   lightGray: '#f8fafc',
 };
 
-export default function CalendarView({ currentDate, selectedDate, onDayPress }) {
+type CalendarViewProps = {
+  currentDate: Date;
+  selectedDate: Date;
+  onDayPress: (date: Date) => void;
+};
+
+export default function CalendarView({
+  currentDate,
+  selectedDate,
+  onDayPress,
+}: CalendarViewProps) {
   const startMonth = startOfMonth(currentDate);
   const endMonth = endOfMonth(currentDate);
   const startDate = startOfWeek(startMonth, { weekStartsOn: 1 });
@@ -29,29 +39,26 @@ export default function CalendarView({ currentDate, selectedDate, onDayPress }) 
   // Week day headers
   const weekDays = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 
-  const weeks = [];
+  const weeks: React.ReactNode[] = [];
   let day = startDate;
 
   while (day <= endMonth || weeks.length < 6) {
-    const week = [];
+    const week: React.ReactNode[] = [];
 
     for (let i = 0; i < 7; i++) {
       const copy = day;
-      const isSelected = isSameDay(copy, selectedDate);
-      const isCurrentMonth = isSameMonth(copy, currentDate);
-      const isTodayDate = isToday(copy);
+      const selected = isSameDay(copy, selectedDate);
+      const currentMonth = isSameMonth(copy, currentDate);
+      const today = isToday(copy);
 
       week.push(
         <TouchableOpacity
           key={copy.toISOString()}
           onPress={() => onDayPress(copy)}
-          style={[
-            styles.dayContainer,
-            !isCurrentMonth && styles.dayOutsideMonth
-          ]}
+          style={[styles.dayContainer, !currentMonth && styles.dayOutsideMonth]}
           activeOpacity={0.8}
         >
-          {isSelected ? (
+          {selected ? (
             // Selected Day with Triple Gradient
             <LinearGradient
               colors={[colors.yellow, colors.orange, colors.red]}
@@ -60,23 +67,23 @@ export default function CalendarView({ currentDate, selectedDate, onDayPress }) 
               end={{ x: 1, y: 1 }}
             >
               <View style={styles.selectedDayInner}>
-                <Text style={styles.selectedDayText}>
-                  {copy.getDate()}
-                </Text>
+                <Text style={styles.selectedDayText}>{copy.getDate()}</Text>
               </View>
             </LinearGradient>
-          ) : isTodayDate ? (
+          ) : today ? (
             // Today's Date with Special Styling
             <View style={styles.todayContainer}>
               <LinearGradient
                 colors={['rgba(255, 213, 0, 0.1)', 'rgba(243, 108, 33, 0.1)']}
                 style={styles.todayBackground}
               >
-                <Text style={[
-                  styles.dayText,
-                  styles.todayText,
-                  !isCurrentMonth && styles.dayTextOutsideMonth
-                ]}>
+                <Text
+                  style={[
+                    styles.dayText,
+                    styles.todayText,
+                    !currentMonth && styles.dayTextOutsideMonth,
+                  ]}
+                >
                   {copy.getDate()}
                 </Text>
               </LinearGradient>
@@ -84,16 +91,19 @@ export default function CalendarView({ currentDate, selectedDate, onDayPress }) 
           ) : (
             // Regular Day with Subtle Background
             <View style={styles.regularDay}>
-              <Text style={[
-                styles.dayText,
-                !isCurrentMonth && styles.dayTextOutsideMonth
-              ]}>
+              <Text
+                style={[
+                  styles.dayText,
+                  !currentMonth && styles.dayTextOutsideMonth,
+                ]}
+              >
                 {copy.getDate()}
               </Text>
             </View>
           )}
         </TouchableOpacity>
       );
+
       day = addDays(day, 1);
     }
 
@@ -114,7 +124,7 @@ export default function CalendarView({ currentDate, selectedDate, onDayPress }) 
           </Text>
         ))}
       </View>
-      
+
       {/* // Elegant Divider Line */}
       <LinearGradient
         colors={['transparent', colors.orange, 'transparent']}
@@ -122,11 +132,9 @@ export default function CalendarView({ currentDate, selectedDate, onDayPress }) 
         end={{ x: 1, y: 0 }}
         style={styles.divider}
       />
-      
+
       {/* // Calendar Weeks */}
-      <View style={styles.weeksContainer}>
-        {weeks}
-      </View>
+      <View style={styles.weeksContainer}>{weeks}</View>
     </View>
   );
 }
@@ -210,6 +218,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
+    // RN types don't include this web-only style; keep it for parity.
+    // @ts-ignore
     backdropFilter: 'blur(10px)',
   },
   todayContainer: {

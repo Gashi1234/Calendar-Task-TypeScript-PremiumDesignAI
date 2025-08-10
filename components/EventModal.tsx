@@ -25,15 +25,35 @@ const colors = {
   darkGray: '#374151',
 };
 
+type EventDraft = {
+  title: string;
+  description?: string;
+  date: string; // 'yyyy-MM-dd'
+};
+
+type EditingEvent = {
+  title: string;
+  description?: string;
+  date?: string;
+};
+
+type EventModalProps = {
+  visible: boolean;
+  onClose: () => void;
+  selectedDate: Date;
+  onSave: (event: EventDraft) => void;
+  editingEvent?: EditingEvent | null;
+};
+
 export default function EventModal({
   visible,
   onClose,
   selectedDate,
   onSave,
   editingEvent,
-}) {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+}: EventModalProps) {
+  const [title, setTitle] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
 
   useEffect(() => {
     if (editingEvent) {
@@ -75,10 +95,10 @@ export default function EventModal({
               end={{ x: 1, y: 0 }}
             >
               <View style={styles.headerContent}>
-                <FontAwesome5 
-                  name="calendar-plus" 
-                  size={20} 
-                  color={colors.white} 
+                <FontAwesome5
+                  name="calendar-plus"
+                  size={20}
+                  color={colors.white}
                   style={styles.headerIcon}
                 />
                 <Text style={styles.headerTitle}>
@@ -90,10 +110,10 @@ export default function EventModal({
             <View style={styles.formContainer}>
               {/* Date Display */}
               <View style={styles.dateContainer}>
-                <FontAwesome5 
-                  name="calendar-day" 
-                  size={16} 
-                  color={colors.orange} 
+                <FontAwesome5
+                  name="calendar-day"
+                  size={16}
+                  color={colors.orange}
                   style={styles.dateIcon}
                 />
                 <Text style={styles.dateText}>
@@ -104,10 +124,10 @@ export default function EventModal({
               {/* Title Input */}
               <View style={styles.inputContainer}>
                 <View style={styles.inputWrapper}>
-                  <FontAwesome5 
-                    name="edit" 
-                    size={16} 
-                    color={colors.orange} 
+                  <FontAwesome5
+                    name="edit"
+                    size={16}
+                    color={colors.orange}
                     style={styles.inputIcon}
                   />
                   <TextInput
@@ -123,10 +143,10 @@ export default function EventModal({
               {/* Description Input */}
               <View style={styles.inputContainer}>
                 <View style={[styles.inputWrapper, styles.textAreaWrapper]}>
-                  <FontAwesome5 
-                    name="align-left" 
-                    size={16} 
-                    color={colors.orange} 
+                  <FontAwesome5
+                    name="align-left"
+                    size={16}
+                    color={colors.orange}
                     style={[styles.inputIcon, styles.textAreaIcon]}
                   />
                   <TextInput
@@ -144,38 +164,24 @@ export default function EventModal({
 
               {/* Action Buttons */}
               <View style={styles.buttonRow}>
-                <TouchableOpacity 
-                  onPress={onClose} 
-                  style={styles.cancelButton}
-                  activeOpacity={0.8}
-                >
-                  <LinearGradient
-                    colors={[colors.gray, '#4b5563']}
-                    style={styles.buttonGradient}
-                  >
-                    <FontAwesome5 
-                      name="times" 
-                      size={16} 
-                      color={colors.white} 
+                <TouchableOpacity onPress={onClose} style={styles.cancelButton} activeOpacity={0.8}>
+                  <LinearGradient colors={[colors.gray, '#4b5563']} style={styles.buttonGradient}>
+                    <FontAwesome5
+                      name="times"
+                      size={16}
+                      color={colors.white}
                       style={styles.buttonIcon}
                     />
                     <Text style={styles.buttonText}>Cancel</Text>
                   </LinearGradient>
                 </TouchableOpacity>
-                
-                <TouchableOpacity 
-                  onPress={handleSave} 
-                  style={styles.saveButton}
-                  activeOpacity={0.8}
-                >
-                  <LinearGradient
-                    colors={[colors.orange, colors.red]}
-                    style={styles.buttonGradient}
-                  >
-                    <FontAwesome5 
-                      name="check" 
-                      size={16} 
-                      color={colors.white} 
+
+                <TouchableOpacity onPress={handleSave} style={styles.saveButton} activeOpacity={0.8}>
+                  <LinearGradient colors={[colors.orange, colors.red]} style={styles.buttonGradient}>
+                    <FontAwesome5
+                      name="check"
+                      size={16}
+                      color={colors.white}
                       style={styles.buttonIcon}
                     />
                     <Text style={styles.buttonText}>

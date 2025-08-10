@@ -13,7 +13,25 @@ const colors = {
   darkGray: '#374151',
 };
 
-export default function EventList({ events, selectedDate, onEdit, onDelete }) {
+type Event = {
+  title: string;
+  description?: string;
+  [key: string]: any; // to allow extra fields like date, id, etc.
+};
+
+type EventListProps = {
+  events: Event[];
+  selectedDate: string;
+  onEdit: (index: number) => void;
+  onDelete: (index: number) => void;
+};
+
+export default function EventList({
+  events,
+  selectedDate,
+  onEdit,
+  onDelete,
+}: EventListProps) {
   return (
     <View style={styles.container}>
       {/* Beautiful Header with Gradient Background */}
@@ -24,19 +42,23 @@ export default function EventList({ events, selectedDate, onEdit, onDelete }) {
           color={colors.gray}
           style={styles.headerIcon}
         />
-        <Text style={styles.headerDescriptionText}>Events for {selectedDate}</Text>
+        <Text style={styles.headerDescriptionText}>
+          Events for {selectedDate}
+        </Text>
       </View>
 
       {events.length === 0 ? (
         <View style={styles.noEventsContainer}>
-          <FontAwesome5 
-            name="calendar-times" 
-            size={48} 
-            color={colors.gray} 
+          <FontAwesome5
+            name="calendar-times"
+            size={48}
+            color={colors.gray}
             style={styles.noEventsIcon}
           />
           <Text style={styles.noEvents}>No events for this day</Text>
-          <Text style={styles.noEventsSubtext}>Tap "Add Event" to create your first event</Text>
+          <Text style={styles.noEventsSubtext}>
+            Tap "Add Event" to create your first event
+          </Text>
         </View>
       ) : (
         events.map((e, i) => (
@@ -45,17 +67,17 @@ export default function EventList({ events, selectedDate, onEdit, onDelete }) {
               colors={['rgba(255, 255, 255, 0.9)', 'rgba(248, 250, 252, 0.9)']}
               style={styles.eventGradient}
             >
-              <TouchableOpacity 
-                style={styles.eventInfo} 
+              <TouchableOpacity
+                style={styles.eventInfo}
                 onPress={() => onEdit(i)}
                 activeOpacity={0.7}
               >
                 <View style={styles.eventContent}>
                   <View style={styles.eventHeader}>
-                    <FontAwesome5 
-                      name="calendar-check" 
-                      size={16} 
-                      color={colors.orange} 
+                    <FontAwesome5
+                      name="calendar-check"
+                      size={16}
+                      color={colors.orange}
                       style={styles.eventIcon}
                     />
                     <Text style={styles.title}>{e.title}</Text>
@@ -65,10 +87,10 @@ export default function EventList({ events, selectedDate, onEdit, onDelete }) {
                   )}
                 </View>
               </TouchableOpacity>
-              
-              <TouchableOpacity 
-                testID={`delete-button-${i}`} 
-                onPress={() => onDelete(i)} 
+
+              <TouchableOpacity
+                testID={`delete-button-${i}`}
+                onPress={() => onDelete(i)}
                 style={styles.deleteButton}
                 activeOpacity={0.7}
               >
@@ -76,10 +98,10 @@ export default function EventList({ events, selectedDate, onEdit, onDelete }) {
                   colors={[colors.red, '#b91c1c']}
                   style={styles.deleteGradient}
                 >
-                  <FontAwesome5 
-                    name="trash-alt" 
-                    size={16} 
-                    color={colors.white} 
+                  <FontAwesome5
+                    name="trash-alt"
+                    size={16}
+                    color={colors.white}
                   />
                 </LinearGradient>
               </TouchableOpacity>
@@ -92,8 +114,8 @@ export default function EventList({ events, selectedDate, onEdit, onDelete }) {
 }
 
 const styles = StyleSheet.create({
-  container: { 
-    marginTop: 15, 
+  container: {
+    marginTop: 15,
     flex: 1,
   },
   headerIcon: {
@@ -112,7 +134,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.gray,
     fontWeight: '500',
-  },  
+  },
   noEventsContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -127,8 +149,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     opacity: 0.7,
   },
-  noEvents: { 
-    fontStyle: 'italic', 
+  noEvents: {
+    fontStyle: 'italic',
     color: colors.gray,
     fontSize: 16,
     fontWeight: '600',
@@ -156,7 +178,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(243, 108, 33, 0.2)',
     overflow: 'hidden',
   },
-  eventInfo: { 
+  eventInfo: {
     flex: 1,
   },
   eventContent: {
@@ -170,21 +192,21 @@ const styles = StyleSheet.create({
   eventIcon: {
     marginRight: 10,
   },
-  title: { 
-    fontWeight: 'bold', 
-    fontSize: 17, 
+  title: {
+    fontWeight: 'bold',
+    fontSize: 17,
     color: colors.red,
     flex: 1,
     letterSpacing: 0.3,
   },
-  description: { 
-    fontSize: 15, 
+  description: {
+    fontSize: 15,
     color: colors.darkGray,
     lineHeight: 22,
     marginTop: 4,
     paddingLeft: 26,
   },
-  deleteButton: { 
+  deleteButton: {
     position: 'absolute',
     top: 12,
     right: 12,

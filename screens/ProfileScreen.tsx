@@ -2,10 +2,12 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { signOut } from 'firebase/auth';
+import type { User } from 'firebase/auth';
 import { auth } from '../firebase';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesome5 } from '@expo/vector-icons';
 
+// Local colors (unchanged)
 const colors = {
   yellow: '#ffd500',
   red: '#d71a28',
@@ -15,8 +17,15 @@ const colors = {
   lightGray: '#f3f4f6',
 };
 
-export default function ProfileScreen({ navigation }) {
-  const user = auth.currentUser;
+// Minimal nav typing so we don't have to import React Navigation types here
+type ProfileScreenProps = {
+  navigation: {
+    replace: (routeName: string) => void;
+  };
+};
+
+export default function ProfileScreen({ navigation }: ProfileScreenProps) {
+  const user: User | null = auth.currentUser;
 
   const handleLogout = async () => {
     await signOut(auth);
@@ -39,15 +48,8 @@ export default function ProfileScreen({ navigation }) {
         <View style={styles.profileCard}>
           {/* Profile Icon with Gradient */}
           <View style={styles.iconContainer}>
-            <LinearGradient
-              colors={[colors.orange, colors.red]}
-              style={styles.iconGradient}
-            >
-              <FontAwesome5
-                name="user-circle"
-                size={70}
-                color={colors.white}
-              />
+            <LinearGradient colors={[colors.orange, colors.red]} style={styles.iconGradient}>
+              <FontAwesome5 name="user-circle" size={70} color={colors.white} />
             </LinearGradient>
           </View>
 
@@ -58,36 +60,15 @@ export default function ProfileScreen({ navigation }) {
           <View style={styles.infoContainer}>
             <Text style={styles.label}>Email Address</Text>
             <View style={styles.emailWrapper}>
-              <FontAwesome5
-                name="envelope"
-                size={16}
-                color={colors.orange}
-                style={styles.emailIcon}
-              />
-              <Text style={styles.text}>
-                {user?.email ?? 'Unknown user'}
-              </Text>
+              <FontAwesome5 name="envelope" size={16} color={colors.orange} style={styles.emailIcon} />
+              <Text style={styles.text}>{user?.email ?? 'Unknown user'}</Text>
             </View>
           </View>
 
           {/* Logout Button with Gradient */}
-          <TouchableOpacity
-            style={styles.button}
-            onPress={handleLogout}
-            activeOpacity={0.8}
-          >
-            <LinearGradient
-              colors={[colors.red, colors.orange]}
-              style={styles.gradientButton}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-            >
-              <FontAwesome5
-                name="sign-out-alt"
-                size={16}
-                color={colors.white}
-                style={styles.logoutIcon}
-              />
+          <TouchableOpacity style={styles.button} onPress={handleLogout} activeOpacity={0.8}>
+            <LinearGradient colors={[colors.red, colors.orange]} style={styles.gradientButton} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
+              <FontAwesome5 name="sign-out-alt" size={16} color={colors.white} style={styles.logoutIcon} />
               <Text style={styles.buttonText}>Log Out</Text>
             </LinearGradient>
           </TouchableOpacity>

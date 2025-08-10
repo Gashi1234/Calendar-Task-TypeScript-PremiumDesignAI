@@ -12,10 +12,14 @@ const colors = {
   gray: '#6b7280',
 };
 
-export default function AddEventButton({ onPress }) {
+type AddEventButtonProps = {
+  onPress: () => void;
+};
+
+export default function AddEventButton({ onPress }: AddEventButtonProps) {
   return (
-    <TouchableOpacity 
-      style={styles.buttonContainer} 
+    <TouchableOpacity
+      style={styles.buttonContainer}
       onPress={onPress}
       activeOpacity={0.8}
     >
@@ -26,10 +30,10 @@ export default function AddEventButton({ onPress }) {
         end={{ x: 1, y: 1 }}
       >
         <View style={styles.buttonContent}>
-          <FontAwesome5 
-            name="plus" 
-            size={16} 
-            color={colors.white} 
+          <FontAwesome5
+            name="plus"
+            size={16}
+            color={colors.white}
             style={styles.plusIcon}
           />
           <Text style={styles.addButtonText}>Add Event</Text>
